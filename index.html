@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real Estate Intent Analysis Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-color: #f9fafb;
+        color: #374151;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .header {
+        margin-bottom: 32px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 8px;
+      }
+
+      .alert {
+        background-color: #fee2e2;
+        border-left: 4px solid #ef4444;
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+      }
+
+      .alert p {
+        color: #991b1b;
+        font-size: 0.875rem;
+      }
+
+      .tabs {
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 32px;
+      }
+
+      .tab-nav {
+        display: flex;
+        gap: 32px;
+      }
+
+      .tab-button {
+        padding: 8px 4px;
+        border: none;
+        background: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .tab-button.active {
+        color: #2563eb;
+        border-bottom-color: #3b82f6;
+      }
+
+      .tab-button:not(.active) {
+        color: #6b7280;
+      }
+
+      .tab-button:not(.active):hover {
+        color: #374151;
+        border-bottom-color: #d1d5db;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .grid {
+        display: grid;
+        gap: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      }
+
+      .card {
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .card h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #111827;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .metric {
+        text-align: center;
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 6px;
+      }
+
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .metric-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 4px;
+      }
+
+      .metric-sublabel {
+        font-size: 0.75rem;
+        color: #9ca3af;
+      }
+
+      .signal-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+
+      .signal-header {
+        padding: 16px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .signal-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+      }
+
+      .signal-rationale {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-bottom: 12px;
+      }
+
+      .signal-scores {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .score-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .score-seller {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .score-buyer {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .score-lessor {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .score-lessee {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .score-zero {
+        background: #f3f4f6;
+        color: #6b7280;
+      }
+
+      .signal-content {
+        padding: 16px;
+      }
+
+      .explanation {
+        margin-bottom: 16px;
+      }
+
+      .explanation h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+
+      .explanation p {
+        font-size: 0.875rem;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+
+      .evidence {
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 6px;
+        border-left: 3px solid #cbd5e1;
+      }
+
+      .evidence h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+
+      .evidence p {
+        font-size: 0.8rem;
+        color: #64748b;
+        line-height: 1.4;
+      }
+
+      .summary-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .summary-section h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .summary-box {
+        padding: 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+      }
+
+      .summary-red {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+      }
+
+      .summary-green {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+      }
+
+      .summary-gray {
+        background: #f9fafb;
+        border-left: 4px solid #6b7280;
+      }
+
+      .summary-box h3 {
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .summary-red h3 {
+        color: #dc2626;
+      }
+      .summary-green h3 {
+        color: #166534;
+      }
+      .summary-gray h3 {
+        color: #374151;
+      }
+
+      .summary-red p {
+        color: #dc2626;
+      }
+      .summary-green p {
+        color: #166534;
+      }
+      .summary-gray p {
+        color: #374151;
+      }
+
+      .summary-box ul {
+        color: #374151;
+        padding-left: 20px;
+      }
+
+      .summary-box li {
+        margin-bottom: 4px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Real Estate Intent Analysis</h1>
+        <div class="alert">
+          <p>
+            <strong>Primary Intent: Seller</strong> - Driven by a total score of
+            <strong>29</strong> across <strong>4</strong> signals.
+          </p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-nav">
+          <button class="tab-button active" onclick="showTab('overview')">
+            Overview
+          </button>
+          <button class="tab-button" onclick="showTab('signals')">
+            Signal Analysis
+          </button>
+          <button class="tab-button" onclick="showTab('summary')">
+            Executive Summary
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview Tab -->
+      <div id="overview" class="tab-content active">
+        <div class="grid">
+          <div class="card">
+            <h2>Total Intent Scores</h2>
+            <div class="chart-container">
+              <canvas id="totalScoresChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Average Intent Scores</h2>
+            <div class="chart-container">
+              <canvas id="averageScoresChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Intent Distribution</h2>
+            <div class="chart-container">
+              <canvas id="distributionChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Key Metrics</h2>
+            <div class="metrics-grid">
+              <div class="metric">
+                <div class="metric-value">29</div>
+                <div class="metric-label">Seller Score</div>
+                <div class="metric-sublabel">4 signals</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">10</div>
+                <div class="metric-label">Lessee Score</div>
+                <div class="metric-sublabel">1 signal</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">8</div>
+                <div class="metric-label">Lessor Score</div>
+                <div class="metric-sublabel">1 signal</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">0</div>
+                <div class="metric-label">Buyer Score</div>
+                <div class="metric-sublabel">0 signals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signals Tab -->
+      <div id="signals" class="tab-content">
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Ownership Tenure Over 20 Years</div>
+            <div class="signal-rationale">
+              Ownership exceeding 20 years often signals generational transfer,
+              retirement, or portfolio rebalancing.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Tenure < 20 years.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Ownership Tenure 10+ Years</div>
+            <div class="signal-rationale">
+              Holding a property for 10-20 years increases the likelihood of
+              repositioning, refinancing, or liquidation.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 6</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Tenure is 16.5 years (10-20).</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Tenure: 16.5</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Market Appreciation and Equity</div>
+            <div class="signal-rationale">
+              Significant appreciation builds 'paper wealth,' which motivates
+              owners to sell and lock in profits.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                Cannot calculate market appreciation; purchase price is
+                unavailable.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Financial Distress Liens</div>
+            <div class="signal-rationale">
+              Non-mechanic liens (tax, judgments) directly constrain refinancing
+              and cloud title, often forcing disposition.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 9</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Recent lien activity detected.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Lien count: 17</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Court Orders Compelled Sale</div>
+            <div class="signal-rationale">
+              Court orders for partition, probate, or bankruptcy legally compel
+              a sale to divide interests or settle estates.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>No compelling court orders.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">High Property Tax Burden</div>
+            <div class="signal-rationale">
+              Anomalously high property taxes relative to value and local
+              benchmarks compress cash flow and motivate disposition.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Tax burden is within normal parameters.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>
+                %{etr_multiple: 0.680960411138098, yoy_tax_pct:
+                0.008967470505931963, etr_current: 0.010598087481365669}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Distressed Loan Indicators</div>
+            <div class="signal-rationale">
+              Multiple recent deeds of trust signal refinancing pressure or
+              layered financing, indicating potential distress.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>No significant financing.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Address Mismatch Out of State</div>
+            <div class="signal-rationale">
+              Out-of-state ownership almost always means the property is held as
+              an investment and leased to tenants.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Owner is in-state.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Regional Distant Investment</div>
+            <div class="signal-rationale">
+              When the owner lives far enough away within the same state (>=150
+              miles), self-occupancy is unlikely.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Owner is local.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Non-Owner Occupied Analysis</div>
+            <div class="signal-rationale">
+              When Assessor data indicates non-owner occupancy, the property is
+              very likely tenant-occupied.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-lessor">Lessor: 8</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Property is non-owner occupied.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Flag: true</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Vacancy Rate Indicators</div>
+            <div class="signal-rationale">
+              High vacancy directly pressures landlords to lease aggressively.
+              Calculated based on active LoopNet listings.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>No significant vacancy indicators found.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Active Units: 0, Pct of Bldg: N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">
+              Permit Applications for Tenant Improvements
+            </div>
+            <div class="signal-rationale">
+              A tenant improvement permit is one of the most reliable signals of
+              lessee intent, showing investment in a space.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-lessee">Lessee: 10</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Significant improvement permits found.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Type: Office Building</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Mechanic Liens</div>
+            <div class="signal-rationale">
+              Mechanic's liens cloud title and add friction, scoring as moderate
+              seller pressure.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Mechanic's liens found.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Count: 17</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Tax Delinquency Analysis</div>
+            <div class="signal-rationale">
+              Chronic or multi-year property tax delinquency is one of the
+              strongest indicators of financial distress.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Taxes are stable.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Declining Property Value Analysis</div>
+            <div class="signal-rationale">
+              A declining valuation trend reduces equity and may limit
+              refinancing options, motivating a sale.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>Valuation is declining.</p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Decline: -16.56%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive Summary Tab -->
+      <div id="summary" class="tab-content">
+        <div class="summary-section">
+          <h2>Executive Summary</h2>
+
+          <div class="summary-box summary-red">
+            <h3>Analysis Summary</h3>
+            <p>
+              The analysis reveals a dominant seller intent with a total score
+              of 29 across 4 critical signals, primarily driven by financial
+              distress indicators including 17 liens, declining property values
+              (-16.56%), and significant ownership tenure (16.5 years). While
+              lessee and lessor signals show perfect average scores (10.0 and
+              8.0), their limited signal count indicates targeted but narrow
+              intent areas. The overwhelming seller pressure suggests immediate
+              disposition opportunities.
+            </p>
+          </div>
+
+          <div class="summary-box summary-green">
+            <h3>Recommended Action</h3>
+            <p>
+              Focus immediately on seller acquisition opportunities while
+              monitoring strong tenant improvement activity. The financial
+              distress indicators create urgent disposition scenarios that
+              should be prioritized.
+            </p>
+          </div>
+
+          <div class="summary-box summary-gray">
+            <h3>Key Insights</h3>
+            <ul>
+              <li>
+                Seller intent dominates with 29 total points across 4 critical
+                signals
+              </li>
+              <li>
+                Financial distress is evident with 17 liens and declining
+                property values
+              </li>
+              <li>
+                16.5-year ownership tenure indicates mature asset ready for
+                repositioning
+              </li>
+              <li>
+                Strong lessee activity with tenant improvement permits (score
+                10)
+              </li>
+              <li>
+                Non-owner occupied property confirms investment/rental status
+              </li>
+              <li>Zero buyer signals indicate no acquisition competition</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showTab(tabName) {
+        // Hide all tab contents
+        const contents = document.querySelectorAll(".tab-content");
+        contents.forEach((content) => content.classList.remove("active"));
+
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll(".tab-button");
+        buttons.forEach((button) => button.classList.remove("active"));
+
+        // Show selected tab content
+        document.getElementById(tabName).classList.add("active");
+
+        // Add active class to clicked button
+        event.target.classList.add("active");
+      }
+
+      // Initialize charts when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        // Total Scores Bar Chart
+        const totalScoresCtx = document
+          .getElementById("totalScoresChart")
+          .getContext("2d");
+        new Chart(totalScoresCtx, {
+          type: "bar",
+          data: {
+            labels: ["Seller", "Buyer", "Lessor", "Lessee"],
+            datasets: [
+              {
+                label: "Total Score",
+                data: [29, 0, 8, 10],
+                backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
+                borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 35,
+              },
+            },
+          },
+        });
+
+        // Average Scores Radar Chart
+        const averageScoresCtx = document
+          .getElementById("averageScoresChart")
+          .getContext("2d");
+        new Chart(averageScoresCtx, {
+          type: "radar",
+          data: {
+            labels: ["Seller", "Buyer", "Lessor", "Lessee"],
+            datasets: [
+              {
+                label: "Average Score",
+                data: [7.25, 0, 8.0, 10.0],
+                backgroundColor: "rgba(239, 68, 68, 0.2)",
+                borderColor: "rgba(239, 68, 68, 1)",
+                borderWidth: 2,
+                pointBackgroundColor: "rgba(239, 68, 68, 1)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(239, 68, 68, 1)",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              r: {
+                beginAtZero: true,
+                max: 11,
+                ticks: {
+                  stepSize: 2,
+                },
+              },
+            },
+          },
+        });
+
+        // Distribution Pie Chart
+        const distributionCtx = document
+          .getElementById("distributionChart")
+          .getContext("2d");
+        new Chart(distributionCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Seller", "Buyer", "Lessor", "Lessee"],
+            datasets: [
+              {
+                data: [29, 0, 8, 10],
+                backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
+                borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  padding: 20,
+                  usePointStyle: true,
+                },
+              },
+            },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
