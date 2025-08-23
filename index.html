@@ -249,6 +249,29 @@
         line-height: 1.4;
       }
 
+      .evidence ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+
+      .evidence li {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 4px;
+        line-height: 1.4;
+      }
+
+      .doc-link {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .doc-link:hover {
+        text-decoration: underline;
+        color: #1d4ed8;
+      }
+
       .summary-section {
         background: white;
         border-radius: 8px;
@@ -324,16 +347,44 @@
         height: 300px;
         margin-top: 16px;
       }
+
+      .active-signals-only {
+        margin-bottom: 16px;
+      }
+
+      .filter-toggle {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+
+      .filter-toggle:hover {
+        background: #2563eb;
+      }
+
+      .filter-toggle.inactive {
+        background: #6b7280;
+      }
+
+      .filter-toggle.inactive:hover {
+        background: #4b5563;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>Real Estate Intent Analysis</h1>
+        <h1>Real Estate Intent Analysis - 255 E SOUTHERN AVE MESA, AZ 85210</h1>
         <div class="alert">
           <p>
             <strong>Primary Intent: Seller</strong> - Driven by a total score of
-            <strong>29</strong> across <strong>4</strong> signals.
+            <strong>60</strong> across <strong>9</strong> signals.
           </p>
         </div>
       </div>
@@ -380,23 +431,23 @@
             <h2>Key Metrics</h2>
             <div class="metrics-grid">
               <div class="metric">
-                <div class="metric-value">29</div>
+                <div class="metric-value">60</div>
                 <div class="metric-label">Seller Score</div>
-                <div class="metric-sublabel">4 signals</div>
+                <div class="metric-sublabel">9 signals</div>
               </div>
               <div class="metric">
-                <div class="metric-value">10</div>
-                <div class="metric-label">Lessee Score</div>
+                <div class="metric-value">5</div>
+                <div class="metric-label">Buyer Score</div>
                 <div class="metric-sublabel">1 signal</div>
               </div>
               <div class="metric">
-                <div class="metric-value">8</div>
+                <div class="metric-value">5</div>
                 <div class="metric-label">Lessor Score</div>
                 <div class="metric-sublabel">1 signal</div>
               </div>
               <div class="metric">
                 <div class="metric-value">0</div>
-                <div class="metric-label">Buyer Score</div>
+                <div class="metric-label">Lessee Score</div>
                 <div class="metric-sublabel">0 signals</div>
               </div>
             </div>
@@ -406,12 +457,22 @@
 
       <!-- Signals Tab -->
       <div id="signals" class="tab-content">
-        <div class="signal-card">
+        <div class="active-signals-only">
+          <button
+            class="filter-toggle"
+            onclick="toggleActiveOnly()"
+            id="filterBtn"
+          >
+            Show Active Signals Only
+          </button>
+        </div>
+
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Ownership Tenure Over 20 Years</div>
+            <div class="signal-title">Address Mismatch Out of State</div>
             <div class="signal-rationale">
-              Ownership exceeding 20 years often signals generational transfer,
-              retirement, or portfolio rebalancing.
+              Out-of-state owners almost always hold property as an investment
+              to be leased.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -423,21 +484,222 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Tenure < 20 years.</p>
+              <p>
+                The owner's mailing address is in Arizona, the same state as the
+                property. This does not support the out-of-state investor
+                thesis, so this specific signal for Lessor intent is not
+                triggered.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p>Mailing State: AZ, Property State: AZ</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="true">
           <div class="signal-header">
-            <div class="signal-title">Ownership Tenure 10+ Years</div>
+            <div class="signal-title">Cash-Out Refinancing</div>
             <div class="signal-rationale">
-              Holding a property for 10-20 years increases the likelihood of
-              repositioning, refinancing, or liquidation.
+              A recent cash-out loan can signal equity extraction prior to a
+              sale or funds for tenant improvements.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 5</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-lessor">Lessor: 5</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                A cash-out refinancing was recorded within two years of the
+                purchase. This action can indicate an owner is extracting equity
+                as a prelude to a sale, or it can be a source of capital to fund
+                tenant improvements for leasing.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Cash-out loan for $1,850,000 found on 2022-02-10</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Recent Comparable Sales</div>
+            <div class="signal-rationale">
+              High nearby sales activity suggests market liquidity and can
+              motivate sellers, while also indicating areas of interest for
+              buyers.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-buyer">Buyer: 5</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                A total of 10 comparable properties have been sold in the last
+                two years, exceeding the threshold of 5. This high volume of
+                transactions indicates a liquid and active market.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Recent Comparable Sales (24 mo): 10</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Court Orders Distress</div>
+            <div class="signal-rationale">
+              Recorded court orders (probate, divorce, bankruptcy, sale
+              mandates) are strong distress indicators that often lead to or
+              force a sale.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The recorded court order is classified as an 'ORDER', which
+                indicates a general court ruling or judgment that may cloud
+                title. Such orders often involve legal disputes or proceedings
+                that restrict or complicate the transfer of ownership.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <ul>
+                <li>Document code: ORDER</li>
+                <li>Recording Date: 6-05-2025</li>
+                <li>Recorded for: Mesa Commercial Developments Llc</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Declining Property Value</div>
+            <div class="signal-rationale">
+              Falling valuations reduce equity and limit refinancing options,
+              motivating owners to sell to avoid further loss.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The property's FCV has declined for at least two consecutive
+                years. This persistent downward trend is a strong indicator of
+                market softness or property-specific issues, creating pressure
+                on the owner to consider a sale.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>
+                Most Recent FCV (2026): $1,395,566, Previous FCV (2025):
+                $1,401,600, YoY Change: 0%
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Equity vs Assessed Value Gap</div>
+            <div class="signal-rationale">
+              When market value far exceeds assessed value, owners perceive
+              large unrealized gains, creating incentive to sell.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 5</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The estimated market value is 14 times the county's assessed
+                value. This large gap highlights a significant amount of
+                untaxed, unrealized gain, which can strongly incentivize an
+                owner to sell.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>
+                Est. Value: $3,125,000, Assessed Value: $224,256, Ratio: 14x
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Market Appreciation and Equity</div>
+            <div class="signal-rationale">
+              High equity creates 'paper wealth' that is vulnerable to
+              downturns, motivating sellers to lock in profits.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The property has an estimated equity gain of 86% over its
+                purchase price. This substantial 'paper wealth' is a powerful
+                motivator for an owner to sell and realize their profits,
+                especially in a volatile market.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Equity: $2,698,144, Purchase Price: $3,125,000, Gain: 86%</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="true">
+          <div class="signal-header">
+            <div class="signal-title">Mechanic's Liens</div>
+            <div class="signal-rationale">
+              Mechanic's liens create friction for sales and refinancing,
+              representing moderate distress pressure on ownership.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-seller">Seller: 6</span>
@@ -449,24 +711,82 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Tenure is 16.5 years (10-20).</p>
+              <p>
+                The property has 36 active mechanic's lien(s) filed against it.
+                These are claims made by contractors or suppliers for unpaid
+                work. While less severe than a tax lien, they still cloud the
+                title and create friction for refinancing or selling.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Tenure: 16.5</p>
+              <p><strong>Found 36 Mechanic's Lien(s):</strong></p>
+              <ul>
+                <li>
+                  Date: 5-04-2020, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20200378651&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20200378651</a
+                  >
+                </li>
+                <li>
+                  Date: 6-13-2022, Against: Mesa Commercial Developments Llc,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220496469&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20220496469</a
+                  >
+                </li>
+                <li>
+                  Date: 7-29-2022, Against: Mesa Commercial Developments Llc,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220610580&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20220610580</a
+                  >
+                </li>
+                <li>
+                  Date: 9-11-2019, Against: Mesa Commercial Developments Llc,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190709111&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20190709111</a
+                  >
+                </li>
+                <li>
+                  Date: 7-12-2022, Against: Mesa Commercial Developments Llc,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220567128&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20220567128</a
+                  >
+                </li>
+                <li>
+                  <em
+                    >... and 31 additional liens (showing first 5 for
+                    brevity)</em
+                  >
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="true">
           <div class="signal-header">
-            <div class="signal-title">Market Appreciation and Equity</div>
+            <div class="signal-title">Multiple Deeds of Trust</div>
             <div class="signal-rationale">
-              Significant appreciation builds 'paper wealth,' which motivates
-              owners to sell and lock in profits.
+              Multiple concurrent deeds of trust indicate layered financing,
+              increasing repayment stress and risk.
             </div>
             <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-seller">Seller: 7</span>
               <span class="score-badge score-zero">Buyer: 0</span>
               <span class="score-badge score-zero">Lessor: 0</span>
               <span class="score-badge score-zero">Lessee: 0</span>
@@ -476,23 +796,78 @@
             <div class="explanation">
               <h4>Explanation</h4>
               <p>
-                Cannot calculate market appreciation; purchase price is
-                unavailable.
+                The property is encumbered by 57 concurrent Deeds of Trust. This
+                layered financing can increase financial stress and make
+                refinancing difficult, representing a medium-to-strong distress
+                signal that could motivate a sale.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p><strong>Found 57 Deed of Trust(s):</strong></p>
+              <ul>
+                <li>
+                  Date: 11-12-2019, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190907852&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20190907852</a
+                  >
+                </li>
+                <li>
+                  Date: 2-12-2019, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190095733&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20190095733</a
+                  >
+                </li>
+                <li>
+                  Date: 5-09-2018, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20180354904&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20180354904</a
+                  >
+                </li>
+                <li>
+                  Date: 3-13-2023, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20230125438&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20230125438</a
+                  >
+                </li>
+                <li>
+                  Date: 5-10-2022, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220408515&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20220408515</a
+                  >
+                </li>
+                <li>
+                  <em
+                    >... and 52 additional deeds of trust (showing first 5 for
+                    brevity)</em
+                  >
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="true">
           <div class="signal-header">
-            <div class="signal-title">Financial Distress Liens</div>
+            <div class="signal-title">Non-Mechanic Liens</div>
             <div class="signal-rationale">
-              Non-mechanic liens (tax, judgments) directly constrain refinancing
-              and cloud title, often forcing disposition.
+              Active tax, judgment, or government liens cloud title and
+              constrain financing, often forcing a sale.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-seller">Seller: 9</span>
@@ -504,76 +879,39 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Recent lien activity detected.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>Lien count: 17</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card">
-          <div class="signal-header">
-            <div class="signal-title">Court Orders Compelled Sale</div>
-            <div class="signal-rationale">
-              Court orders for partition, probate, or bankruptcy legally compel
-              a sale to divide interests or settle estates.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>No compelling court orders.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>N/A</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card">
-          <div class="signal-header">
-            <div class="signal-title">High Property Tax Burden</div>
-            <div class="signal-rationale">
-              Anomalously high property taxes relative to value and local
-              benchmarks compress cash flow and motivate disposition.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>Tax burden is within normal parameters.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
               <p>
-                Current ETR: 1.06% vs. 1.56% (Self (3-yr Median) Benchmark). YoY
-                Tax Change: 0.9%.
+                1 non-mechanic lien(s) were found recorded against the property.
+                These liens, which can include tax or judgment filings, create a
+                legal claim against the asset that clouds the title. This often
+                forces an owner to sell the property to satisfy the debt and
+                clear the encumbrance.
               </p>
             </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p><strong>Found 1 Lien(s):</strong></p>
+              <ul>
+                <li>
+                  Date: 7-14-2022, Against: Mesa Commercial Developments Llc,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220572073&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20220572073</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <!-- Zero-score signals (hidden by default when filtering) -->
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Distressed Loan Indicators</div>
+            <div class="signal-title">Aging But Heavily Leveraged</div>
             <div class="signal-rationale">
-              Multiple recent deeds of trust signal refinancing pressure or
-              layered financing, indicating potential distress.
+              Long-term ownership with high leverage suggests repeated equity
+              stripping, often a sign of distress.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -585,21 +923,25 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>No significant financing.</p>
+              <p>
+                The property does not meet both criteria for this signal (Tenure
+                >= 15 years AND LTV >= 80%). The current tenure is 4 years and
+                the LTV is 14%.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p>Tenure: 4 years, LTV: 14%</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Address Mismatch Out of State</div>
+            <div class="signal-title">Distant In-State Investment</div>
             <div class="signal-rationale">
-              Out-of-state ownership almost always means the property is held as
-              an investment and leased to tenants.
+              A long in-state distance between the owner's mailing address and
+              the property makes self-occupancy unlikely.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -611,21 +953,24 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Owner is in-state.</p>
+              <p>
+                The in-state distance between the owner's mailing address and
+                the property is 98 miles, which is below the 150-mile threshold.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p>Owner Mailing State: AZ, Distance to Property: 98 miles</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Regional Distant Investment</div>
+            <div class="signal-title">High Loan-to-Value Ratio</div>
             <div class="signal-rationale">
-              When the owner lives far enough away within the same state (>=150
-              miles), self-occupancy is unlikely.
+              A high loan balance relative to value can pressure an owner to
+              sell to cover debt or motivate a landlord to lease aggressively.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -637,47 +982,25 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Owner is local.</p>
+              <p>
+                The calculated LTV is 14%, which is well below the 68% threshold
+                for high leverage. This suggests the owner has significant
+                equity and is not under financial pressure.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p>Loan: $426,856, Value: $3,125,000, LTV: 14%</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Non-Owner Occupied Analysis</div>
+            <div class="signal-title">Negative or Low Equity</div>
             <div class="signal-rationale">
-              When Assessor data indicates non-owner occupancy, the property is
-              very likely tenant-occupied.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-lessor">Lessor: 8</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>Property is non-owner occupied.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>Flag: true</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card">
-          <div class="signal-header">
-            <div class="signal-title">Vacancy Rate Indicators</div>
-            <div class="signal-rationale">
-              High vacancy directly pressures landlords to lease aggressively.
-              Calculated based on active LoopNet listings.
+              Negative or minimal equity means the owner is underwater or has
+              little cushion, often forcing a sale to resolve debt.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -689,75 +1012,25 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>No significant vacancy indicators found.</p>
+              <p>
+                The owner has a healthy equity position, calculated at 86% of
+                the property value. This is well above the 10% threshold for a
+                low equity distress signal.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Active Units: 0, Pct of Bldg: N/A</p>
+              <p>Equity: $2,698,144, Equity Ratio: 86%</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">
-              Permit Applications for Tenant Improvements
-            </div>
+            <div class="signal-title">Ownership Tenure Analysis</div>
             <div class="signal-rationale">
-              A tenant improvement permit is one of the most reliable signals of
-              lessee intent, showing investment in a space.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-lessee">Lessee: 10</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>Tenant improvement permit found.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>Permit ID: N/A, Date: N/A</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card">
-          <div class="signal-header">
-            <div class="signal-title">Mechanic Liens</div>
-            <div class="signal-rationale">
-              Mechanic's liens cloud title and add friction, scoring as moderate
-              seller pressure.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-seller">Seller: 7</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>Mechanic's liens found.</p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>Count: 17</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card">
-          <div class="signal-header">
-            <div class="signal-title">Tax Delinquency Analysis</div>
-            <div class="signal-rationale">
-              Chronic or multi-year property tax delinquency is one of the
-              strongest indicators of financial distress.
+              Different tenure periods indicate various motivations for
+              disposition or repositioning.
             </div>
             <div class="signal-scores">
               <span class="score-badge score-zero">Seller: 0</span>
@@ -769,24 +1042,28 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Taxes are stable.</p>
+              <p>
+                The ownership tenure of 4 years does not fall within any of the
+                standard commercial real estate hold horizons (7-10 years, 10-20
+                years, or 20+ years).
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>N/A</p>
+              <p>Ownership Tenure: 4 years</p>
             </div>
           </div>
         </div>
 
-        <div class="signal-card">
+        <div class="signal-card" data-has-score="false">
           <div class="signal-header">
-            <div class="signal-title">Declining Property Value Analysis</div>
+            <div class="signal-title">Pending Foreclosure</div>
             <div class="signal-rationale">
-              A declining valuation trend reduces equity and may limit
-              refinancing options, motivating a sale.
+              A Notice of Trustee's Sale (NTS) is a top-urgency disposition
+              signal.
             </div>
             <div class="signal-scores">
-              <span class="score-badge score-seller">Seller: 7</span>
+              <span class="score-badge score-zero">Seller: 0</span>
               <span class="score-badge score-zero">Buyer: 0</span>
               <span class="score-badge score-zero">Lessor: 0</span>
               <span class="score-badge score-zero">Lessee: 0</span>
@@ -795,11 +1072,104 @@
           <div class="signal-content">
             <div class="explanation">
               <h4>Explanation</h4>
-              <p>Valuation is declining.</p>
+              <p>
+                The `isPreforeclosure` flag is not active, suggesting the
+                property is not currently in the foreclosure process according
+                to PropertyRadar data.
+              </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Decline: -16.56%</p>
+              <p>`isPreforeclosure` flag in PropertyRadar: false</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="false">
+          <div class="signal-header">
+            <div class="signal-title">Recent Easement</div>
+            <div class="signal-rationale">
+              A recent easement grant often precedes disposition as it monetizes
+              or encumbers the parcel.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                No new easements have been recorded against the property in the
+                last 24 months.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>No recent easements found.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="false">
+          <div class="signal-header">
+            <div class="signal-title">Suspiciously High Equity</div>
+            <div class="signal-rationale">
+              Large paper gains (equity > purchase price) often motivate owners
+              to sell.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The current estimated equity of $2,698,144 is less than the
+                original purchase price of $3,125,000. This indicates there has
+                not been a substantial paper gain since purchase.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Est. Equity: $2,698,144, Purchase Price: $3,125,000</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signal-card" data-has-score="false">
+          <div class="signal-header">
+            <div class="signal-title">Tax Delinquency</div>
+            <div class="signal-rationale">
+              Tax delinquency clouds title and can lead to a tax lien sale,
+              creating high urgency to sell.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The property's tax payments are current, with no outstanding
+                delinquencies reported. This indicates financial stability and a
+                lack of pressure from tax authorities.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Delinquent Years: 0, Amount Due: $0</p>
             </div>
           </div>
         </div>
@@ -813,23 +1183,20 @@
           <div class="summary-box summary-red">
             <h3>Analysis Summary</h3>
             <p>
-              The data indicates a notable interest from lessors and lessees,
-              with high average intent scores of 8.0 and 10.0 respectively,
-              suggesting strong leasing activity and demand in the current
-              market. However, seller intent dominates with 29 total points
-              across 4 signals, primarily driven by financial distress
-              indicators. This creates a complex scenario where leasing activity
-              coexists with disposition pressure, indicating potential value-add
-              opportunities through strategic acquisition and repositioning.
+              Seller intent is the primary driver with a total score of 60,
+              heavily influenced by non-mechanic liens (9), recent comparable
+              sales (7), and court orders or distress indicators (7), indicating
+              potential readiness to sell driven by legal and market pressures.
             </p>
           </div>
 
           <div class="summary-box summary-green">
             <h3>Recommended Action</h3>
             <p>
-              Focus on strengthening leasing relationships and explore long-term
-              occupancy opportunities, while monitoring seller distress signals
-              for potential acquisition opportunities.
+              Contact the seller to negotiate acquisition for the property at
+              255 E SOUTHERN AVE MESA, AZ 85210, justified by strong seller
+              distress signals and active liens indicating a possible
+              opportunity to acquire at favorable terms.
             </p>
           </div>
 
@@ -837,31 +1204,34 @@
             <h3>Key Insights</h3>
             <ul>
               <li>
-                Seller intent dominates with 29 total points across 4 critical
+                Seller intent dominates with 60 total points across 9 critical
                 signals
               </li>
               <li>
-                Financial distress evident with 17 liens and declining property
-                values (-16.56%)
+                Financial distress evident with 36 mechanic's liens and 1
+                non-mechanic lien
               </li>
               <li>
-                16.5-year ownership tenure indicates mature asset ready for
-                repositioning
+                57 concurrent deeds of trust indicate complex layered financing
+                structure
               </li>
               <li>
-                Strong lessee activity with tenant improvement permits (perfect
-                score 10)
+                4-year ownership tenure suggests early-stage investment hold
               </li>
               <li>
-                Property tax burden remains within normal parameters (1.06% vs
-                1.56% benchmark)
+                Strong equity position (86%) with substantial unrealized gains
               </li>
               <li>
-                Non-owner occupied property confirms investment/rental status
-                (lessor score 8)
+                Market value significantly exceeds assessed value (14x ratio)
               </li>
               <li>
-                Zero buyer signals indicate no current acquisition competition
+                Declining property valuations creating additional selling
+                pressure
+              </li>
+              <li>Active court orders and legal proceedings clouding title</li>
+              <li>
+                High comparable sales activity (10 in 24 months) indicating
+                liquid market
               </li>
             </ul>
           </div>
@@ -870,6 +1240,8 @@
     </div>
 
     <script>
+      let showActiveOnly = false;
+
       function showTab(tabName) {
         // Hide all tab contents
         const contents = document.querySelectorAll(".tab-content");
@@ -886,6 +1258,28 @@
         event.target.classList.add("active");
       }
 
+      function toggleActiveOnly() {
+        showActiveOnly = !showActiveOnly;
+        const filterBtn = document.getElementById("filterBtn");
+        const signalCards = document.querySelectorAll(".signal-card");
+
+        if (showActiveOnly) {
+          filterBtn.textContent = "Show All Signals";
+          filterBtn.classList.remove("inactive");
+          signalCards.forEach((card) => {
+            if (card.getAttribute("data-has-score") === "false") {
+              card.style.display = "none";
+            }
+          });
+        } else {
+          filterBtn.textContent = "Show Active Signals Only";
+          filterBtn.classList.add("inactive");
+          signalCards.forEach((card) => {
+            card.style.display = "block";
+          });
+        }
+      }
+
       // Initialize charts when page loads
       document.addEventListener("DOMContentLoaded", function () {
         // Total Scores Bar Chart
@@ -899,7 +1293,7 @@
             datasets: [
               {
                 label: "Total Score",
-                data: [29, 0, 8, 10],
+                data: [60, 5, 5, 0],
                 backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
                 borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
                 borderWidth: 1,
@@ -917,7 +1311,7 @@
             scales: {
               y: {
                 beginAtZero: true,
-                max: 35,
+                max: 70,
               },
             },
           },
@@ -934,7 +1328,7 @@
             datasets: [
               {
                 label: "Average Score",
-                data: [7.25, 0, 8.0, 10.0],
+                data: [6.67, 5.0, 5.0, 0],
                 backgroundColor: "rgba(239, 68, 68, 0.2)",
                 borderColor: "rgba(239, 68, 68, 1)",
                 borderWidth: 2,
@@ -956,7 +1350,7 @@
             scales: {
               r: {
                 beginAtZero: true,
-                max: 11,
+                max: 8,
                 ticks: {
                   stepSize: 2,
                 },
@@ -975,7 +1369,7 @@
             labels: ["Seller", "Buyer", "Lessor", "Lessee"],
             datasets: [
               {
-                data: [29, 0, 8, 10],
+                data: [60, 5, 5, 0],
                 backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
                 borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
                 borderWidth: 2,
