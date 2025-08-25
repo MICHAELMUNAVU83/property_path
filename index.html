@@ -384,7 +384,7 @@
         <div class="alert">
           <p>
             <strong>Primary Intent: Seller</strong> - Driven by a total score of
-            <strong>60</strong> across <strong>9</strong> signals.
+            <strong>55</strong> across <strong>8</strong> signals.
           </p>
         </div>
       </div>
@@ -431,9 +431,9 @@
             <h2>Key Metrics</h2>
             <div class="metrics-grid">
               <div class="metric">
-                <div class="metric-value">60</div>
+                <div class="metric-value">55</div>
                 <div class="metric-label">Seller Score</div>
-                <div class="metric-sublabel">9 signals</div>
+                <div class="metric-sublabel">8 signals</div>
               </div>
               <div class="metric">
                 <div class="metric-value">5</div>
@@ -467,37 +467,7 @@
           </button>
         </div>
 
-        <div class="signal-card" data-has-score="false">
-          <div class="signal-header">
-            <div class="signal-title">Address Mismatch Out of State</div>
-            <div class="signal-rationale">
-              Out-of-state owners almost always hold property as an investment
-              to be leased.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-zero">Seller: 0</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>
-                The owner's mailing address is in Arizona, the same state as the
-                property. This does not support the out-of-state investor
-                thesis, so this specific signal for Lessor intent is not
-                triggered.
-              </p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>Mailing State: AZ, Property State: AZ</p>
-            </div>
-          </div>
-        </div>
-
+        <!-- Active Signals -->
         <div class="signal-card" data-has-score="true">
           <div class="signal-header">
             <div class="signal-title">Cash-Out Refinancing</div>
@@ -519,7 +489,8 @@
                 A cash-out refinancing was recorded within two years of the
                 purchase. This action can indicate an owner is extracting equity
                 as a prelude to a sale, or it can be a source of capital to fund
-                tenant improvements for leasing.
+                tenant improvements for leasing. It moderately increases both
+                Seller and Lessor intent.
               </p>
             </div>
             <div class="evidence">
@@ -550,7 +521,9 @@
               <p>
                 A total of 10 comparable properties have been sold in the last
                 two years, exceeding the threshold of 5. This high volume of
-                transactions indicates a liquid and active market.
+                transactions indicates a liquid and active market. This can
+                motivate sellers by confirming market value and suggests a
+                target area for active buyers.
               </p>
             </div>
             <div class="evidence">
@@ -580,18 +553,25 @@
               <h4>Explanation</h4>
               <p>
                 The recorded court order is classified as an 'ORDER', which
-                indicates a general court ruling or judgment that may cloud
-                title. Such orders often involve legal disputes or proceedings
-                that restrict or complicate the transfer of ownership.
+                generally indicates a judgment or court directive that can
+                affect title status. Since it is not specifically labeled as a
+                sale, sheriff's deed, or a direct sale mandate, the score
+                reflects a judicial action that may cloud or clarify title but
+                does not directly indicate a sale. The recency of the order
+                suggests an active legal proceeding influencing the property's
+                status.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <ul>
-                <li>Document code: ORDER</li>
-                <li>Recording Date: 6-05-2025</li>
-                <li>Recorded for: Mesa Commercial Developments Llc</li>
-              </ul>
+              <p>
+                <a
+                  href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20250325412&suffix="
+                  class="doc-link"
+                  target="_blank"
+                  >Doc #20250325412</a
+                >
+              </p>
             </div>
           </div>
         </div>
@@ -632,39 +612,6 @@
 
         <div class="signal-card" data-has-score="true">
           <div class="signal-header">
-            <div class="signal-title">Equity vs Assessed Value Gap</div>
-            <div class="signal-rationale">
-              When market value far exceeds assessed value, owners perceive
-              large unrealized gains, creating incentive to sell.
-            </div>
-            <div class="signal-scores">
-              <span class="score-badge score-seller">Seller: 5</span>
-              <span class="score-badge score-zero">Buyer: 0</span>
-              <span class="score-badge score-zero">Lessor: 0</span>
-              <span class="score-badge score-zero">Lessee: 0</span>
-            </div>
-          </div>
-          <div class="signal-content">
-            <div class="explanation">
-              <h4>Explanation</h4>
-              <p>
-                The estimated market value is 14 times the county's assessed
-                value. This large gap highlights a significant amount of
-                untaxed, unrealized gain, which can strongly incentivize an
-                owner to sell.
-              </p>
-            </div>
-            <div class="evidence">
-              <h4>Evidence</h4>
-              <p>
-                Est. Value: $3,125,000, Assessed Value: $224,256, Ratio: 14x
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="signal-card" data-has-score="true">
-          <div class="signal-header">
             <div class="signal-title">Market Appreciation and Equity</div>
             <div class="signal-rationale">
               High equity creates 'paper wealth' that is vulnerable to
@@ -681,15 +628,19 @@
             <div class="explanation">
               <h4>Explanation</h4>
               <p>
-                The property has an estimated equity gain of 86% over its
-                purchase price. This substantial 'paper wealth' is a powerful
+                The property has an estimated equity gain of 52% over its last
+                transfer value. This substantial 'paper wealth' is a powerful
                 motivator for an owner to sell and realize their profits,
-                especially in a volatile market.
+                especially in a volatile market. This is one of the strongest
+                indicators of seller intent.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Equity: $2,698,144, Purchase Price: $3,125,000, Gain: 86%</p>
+              <p>
+                Est. Equity: $1,617,402, Last Transfer Value: $3,125,000, Gain:
+                52%
+              </p>
             </div>
           </div>
         </div>
@@ -715,7 +666,8 @@
                 The property has 36 active mechanic's lien(s) filed against it.
                 These are claims made by contractors or suppliers for unpaid
                 work. While less severe than a tax lien, they still cloud the
-                title and create friction for refinancing or selling.
+                title and create friction for refinancing or selling, indicating
+                a moderate level of distress.
               </p>
             </div>
             <div class="evidence">
@@ -723,48 +675,48 @@
               <p><strong>Found 36 Mechanic's Lien(s):</strong></p>
               <ul>
                 <li>
-                  Date: 5-04-2020, Against: Dheeraj Bobba,
+                  Date: 6-03-2024, Against: Mesa Commercial Developments Llc,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20200378651&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20240294804&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20200378651</a
+                    >Doc #20240294804</a
                   >
                 </li>
                 <li>
-                  Date: 6-13-2022, Against: Mesa Commercial Developments Llc,
+                  Date: 4-13-2023, Against: Mesa Commercial Developments Llc,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220496469&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20230189939&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20220496469</a
+                    >Doc #20230189939</a
                   >
                 </li>
                 <li>
-                  Date: 7-29-2022, Against: Mesa Commercial Developments Llc,
+                  Date: 4-13-2023, Against: Mesa Commercial Developments Llc,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220610580&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20230189931&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20220610580</a
+                    >Doc #20230189931</a
                   >
                 </li>
                 <li>
-                  Date: 9-11-2019, Against: Mesa Commercial Developments Llc,
+                  Date: 3-14-2023, Against: Mesa Commercial Developments Llc,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190709111&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20230127778&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20190709111</a
+                    >Doc #20230127778</a
                   >
                 </li>
                 <li>
-                  Date: 7-12-2022, Against: Mesa Commercial Developments Llc,
+                  Date: 2-17-2023, Against: Mesa Commercial Developments Llc,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220567128&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20230080771&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20220567128</a
+                    >Doc #20230080771</a
                   >
                 </li>
                 <li>
@@ -804,33 +756,44 @@
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p><strong>Found 57 Deed of Trust(s):</strong></p>
+              <p>
+                <strong>Found 57 Deed of Trust(s) - Recent Examples:</strong>
+              </p>
               <ul>
                 <li>
-                  Date: 11-12-2019, Against: Dheeraj Bobba,
+                  Date: 7-16-2025, Against: Dheeraj Bobba,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190907852&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20250408743&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20190907852</a
+                    >Doc #20250408743</a
                   >
                 </li>
                 <li>
-                  Date: 2-12-2019, Against: Dheeraj Bobba,
+                  Date: 5-30-2025, Against: Dheeraj Bobba,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20190095733&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20250311190&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20190095733</a
+                    >Doc #20250311190</a
                   >
                 </li>
                 <li>
-                  Date: 5-09-2018, Against: Dheeraj Bobba,
+                  Date: 1-05-2024, Against: Dheeraj Bobba,
                   <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20180354904&suffix="
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20240007150&suffix="
                     class="doc-link"
                     target="_blank"
-                    >Doc #20180354904</a
+                    >Doc #20240007150</a
+                  >
+                </li>
+                <li>
+                  Date: 2-12-2024, Against: Dheeraj Bobba,
+                  <a
+                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20240070950&suffix="
+                    class="doc-link"
+                    target="_blank"
+                    >Doc #20240070950</a
                   >
                 </li>
                 <li>
@@ -842,21 +805,7 @@
                     >Doc #20230125438</a
                   >
                 </li>
-                <li>
-                  Date: 5-10-2022, Against: Dheeraj Bobba,
-                  <a
-                    href="https://publicapi.recorder.maricopa.gov/preview/pdf?recordingNumber=20220408515&suffix="
-                    class="doc-link"
-                    target="_blank"
-                    >Doc #20220408515</a
-                  >
-                </li>
-                <li>
-                  <em
-                    >... and 52 additional deeds of trust (showing first 5 for
-                    brevity)</em
-                  >
-                </li>
+                <li><em>... and 52 additional deeds of trust</em></li>
               </ul>
             </div>
           </div>
@@ -889,7 +838,6 @@
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p><strong>Found 1 Lien(s):</strong></p>
               <ul>
                 <li>
                   Date: 7-14-2022, Against: Mesa Commercial Developments Llc,
@@ -906,6 +854,38 @@
         </div>
 
         <!-- Zero-score signals (hidden by default when filtering) -->
+        <div class="signal-card" data-has-score="false">
+          <div class="signal-header">
+            <div class="signal-title">Address Mismatch Out of State</div>
+            <div class="signal-rationale">
+              Out-of-state owners almost always hold property as an investment
+              to be leased.
+            </div>
+            <div class="signal-scores">
+              <span class="score-badge score-zero">Seller: 0</span>
+              <span class="score-badge score-zero">Buyer: 0</span>
+              <span class="score-badge score-zero">Lessor: 0</span>
+              <span class="score-badge score-zero">Lessee: 0</span>
+            </div>
+          </div>
+          <div class="signal-content">
+            <div class="explanation">
+              <h4>Explanation</h4>
+              <p>
+                The owner's mailing address is in Arizona, the same state as the
+                property. This does not support the out-of-state investor
+                thesis, so this specific signal for Lessor intent is not
+                triggered. The owner could be local or a distant in-state
+                investor.
+              </p>
+            </div>
+            <div class="evidence">
+              <h4>Evidence</h4>
+              <p>Mailing State: AZ, Property State: AZ</p>
+            </div>
+          </div>
+        </div>
+
         <div class="signal-card" data-has-score="false">
           <div class="signal-header">
             <div class="signal-title">Aging But Heavily Leveraged</div>
@@ -926,12 +906,13 @@
               <p>
                 The property does not meet both criteria for this signal (Tenure
                 >= 15 years AND LTV >= 80%). The current tenure is 4 years and
-                the LTV is 14%.
+                the LTV is 53%. Therefore, the signal for a heavily leveraged
+                long-term hold did not trigger.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Tenure: 4 years, LTV: 14%</p>
+              <p>Tenure: 4 years, LTV: 53%</p>
             </div>
           </div>
         </div>
@@ -956,6 +937,8 @@
               <p>
                 The in-state distance between the owner's mailing address and
                 the property is 98 miles, which is below the 150-mile threshold.
+                While the owner is not local, the distance is not great enough
+                to trigger this specific signal for a distant investor.
               </p>
             </div>
             <div class="evidence">
@@ -983,14 +966,18 @@
             <div class="explanation">
               <h4>Explanation</h4>
               <p>
-                The calculated LTV is 14%, which is well below the 68% threshold
+                The calculated LTV is 53%, which is well below the 68% threshold
                 for high leverage. This suggests the owner has significant
-                equity and is not under financial pressure.
+                equity and is not under financial pressure from this metric. The
+                signal for distress-driven action remains untriggered.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Loan: $426,856, Value: $3,125,000, LTV: 14%</p>
+              <p>
+                Total Loans: $1,850,000, Est. Current Value: $3,467,402, LTV:
+                53%
+              </p>
             </div>
           </div>
         </div>
@@ -1013,14 +1000,18 @@
             <div class="explanation">
               <h4>Explanation</h4>
               <p>
-                The owner has a healthy equity position, calculated at 86% of
+                The owner has a healthy equity position, calculated at 47% of
                 the property value. This is well above the 10% threshold for a
-                low equity distress signal.
+                low equity distress signal. Therefore, this signal did not
+                trigger.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Equity: $2,698,144, Equity Ratio: 86%</p>
+              <p>
+                Est. Equity: $1,617,402, Est. Value: $3,467,402, Equity Ratio:
+                47%
+              </p>
             </div>
           </div>
         </div>
@@ -1075,7 +1066,8 @@
               <p>
                 The `isPreforeclosure` flag is not active, suggesting the
                 property is not currently in the foreclosure process according
-                to PropertyRadar data.
+                to PropertyRadar data. This urgent distress signal is not
+                triggered.
               </p>
             </div>
             <div class="evidence">
@@ -1104,7 +1096,9 @@
               <h4>Explanation</h4>
               <p>
                 No new easements have been recorded against the property in the
-                last 24 months.
+                last 24 months. The absence of this activity means this specific
+                signal for property repositioning or a pre-sale action has not
+                been triggered.
               </p>
             </div>
             <div class="evidence">
@@ -1132,14 +1126,15 @@
             <div class="explanation">
               <h4>Explanation</h4>
               <p>
-                The current estimated equity of $2,698,144 is less than the
-                original purchase price of $3,125,000. This indicates there has
-                not been a substantial paper gain since purchase.
+                The current estimated equity of $1,617,402 is less than the
+                original transfer value of $3,125,000. This indicates there has
+                not been a substantial paper gain. Therefore, the signal that
+                identifies profit-taking as a motive to sell did not trigger.
               </p>
             </div>
             <div class="evidence">
               <h4>Evidence</h4>
-              <p>Est. Equity: $2,698,144, Purchase Price: $3,125,000</p>
+              <p>Est. Equity: $1,617,402, Last Transfer Value: $3,125,000</p>
             </div>
           </div>
         </div>
@@ -1164,7 +1159,8 @@
               <p>
                 The property's tax payments are current, with no outstanding
                 delinquencies reported. This indicates financial stability and a
-                lack of pressure from tax authorities.
+                lack of pressure from tax authorities. Therefore, this strong
+                distress signal did not trigger.
               </p>
             </div>
             <div class="evidence">
@@ -1183,20 +1179,19 @@
           <div class="summary-box summary-red">
             <h3>Analysis Summary</h3>
             <p>
-              Seller intent is the primary driver with a total score of 60,
-              heavily influenced by non-mechanic liens (9), recent comparable
-              sales (7), and court orders or distress indicators (7), indicating
-              potential readiness to sell driven by legal and market pressures.
+              Seller intent dominates with a total score of 55, driven primarily
+              by non_mechanic_liens, recent sales activity, and court orders
+              indicating distress and active market conditions on the property
+              at 255 E Southern Ave Mesa, AZ 85210.
             </p>
           </div>
 
           <div class="summary-box summary-green">
             <h3>Recommended Action</h3>
             <p>
-              Contact the seller to negotiate acquisition for the property at
-              255 E SOUTHERN AVE MESA, AZ 85210, justified by strong seller
-              distress signals and active liens indicating a possible
-              opportunity to acquire at favorable terms.
+              Engage the seller entity to initiate negotiations for the
+              property, justified by the high seller intent score and active
+              distress signals such as liens and court orders.
             </p>
           </div>
 
@@ -1204,7 +1199,7 @@
             <h3>Key Insights</h3>
             <ul>
               <li>
-                Seller intent dominates with 60 total points across 9 critical
+                Seller intent dominates with 55 total points across 8 critical
                 signals
               </li>
               <li>
@@ -1216,22 +1211,19 @@
                 structure
               </li>
               <li>
-                4-year ownership tenure suggests early-stage investment hold
+                4-year ownership tenure suggests mid-stage investment hold
               </li>
               <li>
-                Strong equity position (86%) with substantial unrealized gains
-              </li>
-              <li>
-                Market value significantly exceeds assessed value (14x ratio)
+                Moderate equity position (47%) with some unrealized gains (52%)
               </li>
               <li>
                 Declining property valuations creating additional selling
                 pressure
               </li>
               <li>Active court orders and legal proceedings clouding title</li>
+              <li>High comparable sales activity indicating liquid market</li>
               <li>
-                High comparable sales activity (10 in 24 months) indicating
-                liquid market
+                Recent cash-out refinancing suggests equity extraction strategy
               </li>
             </ul>
           </div>
@@ -1243,18 +1235,13 @@
       let showActiveOnly = false;
 
       function showTab(tabName) {
-        // Hide all tab contents
         const contents = document.querySelectorAll(".tab-content");
         contents.forEach((content) => content.classList.remove("active"));
 
-        // Remove active class from all buttons
         const buttons = document.querySelectorAll(".tab-button");
         buttons.forEach((button) => button.classList.remove("active"));
 
-        // Show selected tab content
         document.getElementById(tabName).classList.add("active");
-
-        // Add active class to clicked button
         event.target.classList.add("active");
       }
 
@@ -1280,7 +1267,6 @@
         }
       }
 
-      // Initialize charts when page loads
       document.addEventListener("DOMContentLoaded", function () {
         // Total Scores Bar Chart
         const totalScoresCtx = document
@@ -1293,7 +1279,7 @@
             datasets: [
               {
                 label: "Total Score",
-                data: [60, 5, 5, 0],
+                data: [55, 5, 5, 0],
                 backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
                 borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
                 borderWidth: 1,
@@ -1303,17 +1289,8 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 70,
-              },
-            },
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 60 } },
           },
         });
 
@@ -1328,7 +1305,7 @@
             datasets: [
               {
                 label: "Average Score",
-                data: [6.67, 5.0, 5.0, 0],
+                data: [6.88, 5.0, 5.0, 0],
                 backgroundColor: "rgba(239, 68, 68, 0.2)",
                 borderColor: "rgba(239, 68, 68, 1)",
                 borderWidth: 2,
@@ -1342,19 +1319,9 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
+            plugins: { legend: { display: false } },
             scales: {
-              r: {
-                beginAtZero: true,
-                max: 8,
-                ticks: {
-                  stepSize: 2,
-                },
-              },
+              r: { beginAtZero: true, max: 10, ticks: { stepSize: 2 } },
             },
           },
         });
@@ -1369,7 +1336,7 @@
             labels: ["Seller", "Buyer", "Lessor", "Lessee"],
             datasets: [
               {
-                data: [60, 5, 5, 0],
+                data: [55, 5, 5, 0],
                 backgroundColor: ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"],
                 borderColor: ["#dc2626", "#2563eb", "#16a34a", "#d97706"],
                 borderWidth: 2,
@@ -1382,10 +1349,7 @@
             plugins: {
               legend: {
                 position: "bottom",
-                labels: {
-                  padding: 20,
-                  usePointStyle: true,
-                },
+                labels: { padding: 20, usePointStyle: true },
               },
             },
           },
